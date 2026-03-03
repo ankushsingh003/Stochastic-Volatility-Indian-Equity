@@ -5,6 +5,38 @@ class MonteCarloEngine:
     def __init__(self, model):
         self.model = model
 
+    def calculate_greeks(self, K, T, dt, num_paths, option_type='call', r=0.05, eps=None):
+        """
+        Calculate Delta and Gamma using finite differences.
+        eps: Shock to the spot price (default 1%)
+        """
+        # Set default eps if not provided
+        if eps is None:
+            eps = self.model.s0 * 0.01
+
+        # Save original spot
+        s_orig = self.model.s0
+        
+        # Price at S0
+        p0, _ = self.price_european_option(K, T, dt, num_paths, option_type, r)
+        
+        # Price at S0 + eps
+        self.model.s0 = s_orig + eps
+        p_plus, _ = self.price_european_option(K, T, dt, num_paths, option_type, r)
+        
+        # Price at S0 - eps
+        self.model.s0 = s_orig - eps
+        p_minus, _ = self.price_european_option(K, T, dt, num_paths, option_type, r)
+        
+        # Reset original spot
+        self.model.s0 = s_orig
+        
+        # Finite difference Greeks
+        delta = (p_plus - p_minus) / (2 * eps)
+        gamma = (p_plus - 2 * p0 + p_minus) / (eps**2)
+        
+        return {'delta': delta, 'gamma': gamma, 'price': p0}
+
     def price_european_option(self, K, T, dt, num_paths, option_type='call', r=0.05):
         """
         Price a European option using Monte Carlo simulation.
