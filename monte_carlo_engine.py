@@ -6,47 +6,29 @@ class MonteCarloEngine:
         self.model = model
 
     def calculate_greeks(self, K, T, dt, num_paths, option_type='call', r=0.05, eps=None):
-        """
-        Calculate Delta and Gamma using finite differences.
-        eps: Shock to the spot price (default 1%)
-        """
-        # Set default eps if not provided
         if eps is None:
             eps = self.model.s0 * 0.01
 
-        # Save original spot
         s_orig = self.model.s0
         
-        # Price at S0
         p0, _ = self.price_european_option(K, T, dt, num_paths, option_type, r)
         
-        # Price at S0 + eps
         self.model.s0 = s_orig + eps
         p_plus, _ = self.price_european_option(K, T, dt, num_paths, option_type, r)
         
-        # Price at S0 - eps
         self.model.s0 = s_orig - eps
         p_minus, _ = self.price_european_option(K, T, dt, num_paths, option_type, r)
         
-        # Reset original spot
         self.model.s0 = s_orig
         
-        # Finite difference Greeks
         delta = (p_plus - p_minus) / (2 * eps)
         gamma = (p_plus - 2 * p0 + p_minus) / (eps**2)
         
         return {'delta': delta, 'gamma': gamma, 'price': p0}
 
     def price_european_option(self, K, T, dt, num_paths, option_type='call', r=0.05):
-        """
-        Price a European option using Monte Carlo simulation.
-        K: Strike price
-        T: Time to maturity (in years)
-        dt: Time step
-        num_paths: Number of simulation paths
-        """
         S, V = self.model.simulate_paths(T, dt, num_paths)
-        S_T = S[-1] # Prices at maturity
+        S_T = S[-1]
         
         if option_type == 'call':
             payoffs = np.maximum(S_T - K, 0)
@@ -59,7 +41,6 @@ class MonteCarloEngine:
         return price, std_err
 
 if __name__ == "__main__":
-    # Sanity check
     h_model = HestonModel(s0=12000, v0=0.04, kappa=2.0, theta=0.04, sigma=0.3, rho=-0.7)
     engine = MonteCarloEngine(h_model)
     price, err = engine.price_european_option(K=12000, T=1/12, dt=1/252, num_paths=10000)

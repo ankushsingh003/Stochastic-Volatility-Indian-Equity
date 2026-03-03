@@ -2,13 +2,6 @@ import numpy as np
 from scipy.stats import norm
 
 def black_scholes_call(S, K, T, r, sigma):
-    """
-    S: Current asset price
-    K: Strike price
-    T: Time to maturity (years)
-    r: Risk-free rate
-    sigma: Volatility
-    """
     if T <= 0:
         return max(S - K, 0)
     
@@ -19,13 +12,6 @@ def black_scholes_call(S, K, T, r, sigma):
     return call_price
 
 def black_scholes_put(S, K, T, r, sigma):
-    """
-    S: Current asset price
-    K: Strike price
-    T: Time to maturity (years)
-    r: Risk-free rate
-    sigma: Volatility
-    """
     if T <= 0:
         return max(K - S, 0)
         
@@ -36,12 +22,9 @@ def black_scholes_put(S, K, T, r, sigma):
     return put_price
 
 def implied_volatility(target_value, S, K, T, r, option_type='call'):
-    """
-    Calculate implied volatility using Newton-Raphson.
-    """
     MAX_ITERATIONS = 100
     PRECISION = 1.0e-5
-    sigma = 0.5 # Initial guess
+    sigma = 0.5
     
     for i in range(MAX_ITERATIONS):
         if option_type == 'call':
@@ -53,11 +36,10 @@ def implied_volatility(target_value, S, K, T, r, option_type='call'):
         if abs(diff) < PRECISION:
             return sigma
             
-        # Vega calculation
         d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
         vega = S * norm.pdf(d1) * np.sqrt(T)
         
-        if vega < 1e-10: # Avoid division by zero
+        if vega < 1e-10:
             return sigma
             
         sigma = sigma + diff / vega

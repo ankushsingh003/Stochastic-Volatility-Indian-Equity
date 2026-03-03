@@ -7,13 +7,11 @@ from monte_carlo_engine import MonteCarloEngine
 from black_scholes import black_scholes_call, implied_volatility
 
 def run_simulation_enhanced():
-    # Load data
     nifty_df = pd.read_csv("data/nifty_spot.csv", skiprows=[1, 2], index_col=0, parse_dates=True)
     vix_df = pd.read_csv("data/vix.csv", skiprows=[1, 2], index_col=0, parse_dates=True)
     
-    # Target date: March 23, 2020
     target_date = "2020-03-23"
-    r = 0.05 # Risk-free rate
+    r = 0.05
     
     s0 = nifty_df.loc[target_date, "Close"]
     vix0 = vix_df.loc[target_date, "Close"] / 100.0
@@ -24,13 +22,11 @@ def run_simulation_enhanced():
     print(f"Enhanced Simulation for {target_date}")
     print(f"Nifty Spot: {s0:.2f}, India VIX: {vix0*100:.2f}%")
 
-    # 1. Estimation
     hist_vix = vix_df[:target_date]["Close"] / 100.0
     theta_est, kappa_est, sigma_est = estimate_initial_params(hist_vix)
     rho_est = -0.7
     
-    # 2. Comparison with Black-Scholes (Baseline)
-    T = 30/365 # 30 days
+    T = 30/365
     dt = 1/252
     strikes = np.linspace(s0 * 0.9, s0 * 1.1, 8)
     
@@ -43,19 +39,15 @@ def run_simulation_enhanced():
     
     print("Pricing Heston vs Black-Scholes...")
     for K in strikes:
-        # Heston MC Price
         hp, _ = engine.price_european_option(K=K, T=T, dt=dt, num_paths=10000, r=r)
         heston_prices.append(hp)
         
-        # Black-Scholes Price (using current VIX as flat volatility)
         bp = black_scholes_call(s0, K, T, r, vix0)
         bs_prices.append(bp)
         
-        # Calculate Implied Volatility from Heston Price
         iv = implied_volatility(hp, s0, K, T, r)
         ivs.append(iv)
         
-    # Visualization: Price Comparison
     plt.figure(figsize=(12, 5))
     
     plt.subplot(1, 2, 1)
@@ -67,7 +59,6 @@ def run_simulation_enhanced():
     plt.legend()
     plt.grid(True)
     
-    # Visualization: Volatility Smile
     plt.subplot(1, 2, 2)
     plt.plot(strikes, [i*100 for i in ivs], 'g-s')
     plt.title("Volatility Smile (IV from Heston)")
@@ -77,9 +68,7 @@ def run_simulation_enhanced():
     
     plt.tight_layout()
     plt.savefig("output/comparison_and_smile.png")
-    print("Saved enhanced plots to output/comparison_and_smile.png")
     
-    # Results CSV
     results_df = pd.DataFrame({
         'Strike': strikes,
         'HestonPrice': heston_prices,
@@ -87,7 +76,6 @@ def run_simulation_enhanced():
         'ImpliedVol': ivs
     })
     results_df.to_csv("output/enhanced_results.csv", index=False)
-    print("Saved results to output/enhanced_results.csv")
 
 if __name__ == "__main__":
     run_simulation_enhanced()
