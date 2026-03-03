@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-from heston_model import HestonModel, estimate_initial_params, calibrate_heston
-from monte_carlo_engine import MonteCarloEngine
-from black_scholes import black_scholes_call, implied_volatility
+from heston_model.heston_model import HestonModel, estimate_initial_params, calibrate_heston
+from engines.monte_carlo_engine import MonteCarloEngine
+from black_scholes.black_scholes import black_scholes_call, implied_volatility
 
 def run_simulation_enhanced():
     nifty_df = pd.read_csv("data/nifty_spot.csv", skiprows=[1, 2], index_col=0, parse_dates=True)

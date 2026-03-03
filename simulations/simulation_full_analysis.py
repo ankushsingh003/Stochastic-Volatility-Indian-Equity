@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-from heston_model import HestonModel, estimate_initial_params
-from monte_carlo_engine import MonteCarloEngine
-from black_scholes import black_scholes_call, implied_volatility
+from heston_model.heston_model import HestonModel, estimate_initial_params
+from engines.monte_carlo_engine import MonteCarloEngine
+from black_scholes.black_scholes import black_scholes_call, implied_volatility
 
 def run_full_analysis():
     try:

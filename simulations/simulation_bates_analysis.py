@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from bates_model import BatesModel
-from heston_model import HestonModel
-from monte_carlo_engine import MonteCarloEngine
-from black_scholes import implied_volatility
+from bates_model.bates_model import BatesModel
+from heston_model.heston_model import HestonModel
+from engines.monte_carlo_engine import MonteCarloEngine
+from black_scholes.black_scholes import implied_volatility
 
 def compare_heston_bates():
     s0, v0, r = 10000, 0.04, 0.05

@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from heston_model import HestonModel
+from heston_model.heston_model import HestonModel
 
 class BatesModel(HestonModel):
     def __init__(self, s0, v0, kappa, theta, sigma, rho, lamb, mu_j, sigma_j):

@@ -1,5 +1,5 @@
 import numpy as np
-from heston_model import HestonModel
+from heston_model.heston_model import HestonModel
 
 class MonteCarloEngine:
     def __init__(self, model):

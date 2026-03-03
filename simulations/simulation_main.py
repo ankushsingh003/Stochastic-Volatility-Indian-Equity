@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-from heston_model import HestonModel, estimate_initial_params
-from monte_carlo_engine import MonteCarloEngine
+from heston_model.heston_model import HestonModel, estimate_initial_params
+from engines.monte_carlo_engine import MonteCarloEngine
 
 def run_simulation():
     nifty_df = pd.read_csv("data/nifty_spot.csv", skiprows=[1, 2], index_col=0, parse_dates=True)
