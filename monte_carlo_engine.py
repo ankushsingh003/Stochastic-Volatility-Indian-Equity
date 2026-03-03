@@ -1,0 +1,34 @@
+import numpy as np
+from heston_model import HestonModel
+
+class MonteCarloEngine:
+    def __init__(self, model):
+        self.model = model
+
+    def price_european_option(self, K, T, dt, num_paths, option_type='call', r=0.05):
+        """
+        Price a European option using Monte Carlo simulation.
+        K: Strike price
+        T: Time to maturity (in years)
+        dt: Time step
+        num_paths: Number of simulation paths
+        """
+        S, V = self.model.simulate_paths(T, dt, num_paths)
+        S_T = S[-1] # Prices at maturity
+        
+        if option_type == 'call':
+            payoffs = np.maximum(S_T - K, 0)
+        else:
+            payoffs = np.maximum(K - S_T, 0)
+            
+        price = np.exp(-r * T) * np.mean(payoffs)
+        std_err = np.exp(-r * T) * np.std(payoffs) / np.sqrt(num_paths)
+        
+        return price, std_err
+
+if __name__ == "__main__":
+    # Sanity check
+    h_model = HestonModel(s0=12000, v0=0.04, kappa=2.0, theta=0.04, sigma=0.3, rho=-0.7)
+    engine = MonteCarloEngine(h_model)
+    price, err = engine.price_european_option(K=12000, T=1/12, dt=1/252, num_paths=10000)
+    print(f"Option Price: {price:.2f} +/- {err:.2f}")
