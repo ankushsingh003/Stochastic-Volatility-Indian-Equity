@@ -12,6 +12,7 @@ A professional-grade research and simulation engine for pricing equity derivativ
 - **Market Calibration**: Automated fitting of model parameters to market option chains (implied volatility surfaces).
 - **Strategy Backtesting**: Comprehensive Delta-Hedging framework to evaluate model performance against historical market regimes (e.g., March 2020 crash).
 - **Modular Architecture**: Fully decoupled packages for models, engines, and simulations.
+- **Dynamic Data Acquisition**: Key-less scraping of Nifty spot and India VIX data using `yfinance` and `nsepython`.
 
 ## 📂 Directory Structure
 
@@ -44,10 +45,10 @@ graph TD
 
 ## 🛠 Usage & Execution
 
-Initialize the environment by setting the project root in your `PYTHONPATH`:
-
+### 0. Data Refresh (Optional)
+Fetches the latest Nifty 50 and India VIX data without requiring API keys.
 ```powershell
-$env:PYTHONPATH = "."
+python data_loader/data_loader.py
 ```
 
 ### 1. Full Market Analysis
@@ -86,8 +87,14 @@ sequenceDiagram
     S->>S: Generate Plots & PnL
 ```
 
-## 📈 Results
 All visual outputs (PNG) are stored in `output/` and `backtest_results/`. The suite provides side-by-side comparisons of volatility smiles and cumulative hedging errors across different market regimes.
+
+## 📦 Dependencies
+
+- `Python 3.10+`
+- `pandas`, `numpy`, `matplotlib`, `scipy`
+- `yfinance`: For global index and stock data.
+- `nsepython`: For reliable Indian market indices and VIX scraping.
 
 ---
 *Developed for advanced stochastic calculus research and derivative strategy validation.*
