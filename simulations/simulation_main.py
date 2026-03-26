@@ -6,8 +6,8 @@ from heston_model.heston_model import HestonModel, estimate_initial_params
 from engines.monte_carlo_engine import MonteCarloEngine
 
 def run_simulation():
-    nifty_df = pd.read_csv("data/nifty_spot.csv", skiprows=[1, 2], index_col=0, parse_dates=True)
-    vix_df = pd.read_csv("data/vix.csv", skiprows=[1, 2], index_col=0, parse_dates=True)
+    nifty_df = pd.read_csv("data/nifty_spot.csv", index_col=0, parse_dates=True)
+    vix_df = pd.read_csv("data/vix.csv", index_col=0, parse_dates=True)
     
     target_date = "2020-03-23"
     

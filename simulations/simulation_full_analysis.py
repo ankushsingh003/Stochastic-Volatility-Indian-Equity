@@ -8,8 +8,8 @@ from black_scholes.black_scholes import black_scholes_call, implied_volatility
 
 def run_full_analysis():
     try:
-        nifty_df = pd.read_csv("data/nifty_spot.csv", skiprows=[1, 2], index_col=0, parse_dates=True)
-        vix_df = pd.read_csv("data/vix.csv", skiprows=[1, 2], index_col=0, parse_dates=True)
+        nifty_df = pd.read_csv("data/nifty_spot.csv", index_col=0, parse_dates=True)
+        vix_df = pd.read_csv("data/vix.csv", index_col=0, parse_dates=True)
     except FileNotFoundError:
         return
 

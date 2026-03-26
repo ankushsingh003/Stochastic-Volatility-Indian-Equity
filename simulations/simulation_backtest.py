@@ -9,8 +9,8 @@ from engines.monte_carlo_engine import MonteCarloEngine
 from engines.backtest_engine import run_delta_hedge_backtest
 
 def run_comparative_backtest():
-    nifty_df = pd.read_csv("data/nifty_spot.csv", skiprows=[1, 2], index_col=0, parse_dates=True)
-    vix_df = pd.read_csv("data/vix.csv", skiprows=[1, 2], index_col=0, parse_dates=True)
+    nifty_df = pd.read_csv("data/nifty_spot.csv", index_col=0, parse_dates=True)
+    vix_df = pd.read_csv("data/vix.csv", index_col=0, parse_dates=True)
     
     start_date = "2020-03-09"
     end_date = "2020-03-27"
